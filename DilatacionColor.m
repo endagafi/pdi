@@ -1,6 +1,6 @@
 
 
-function [g] = ErosionColor (F, orden)
+function [g] = DilatacionColor (F, orden)
   
     if  strcmp(orden,'ordenComponente') == 1
       x = input('Ingrese el numero de componente: ');
@@ -33,7 +33,8 @@ function [g] = ErosionColor (F, orden)
           end
         end 
         temp = aplicarOrden(submat, orden, x);
-         g(i,j, :) =  temp(1, 1, :);
+        [r, s, t] = size(temp);
+         g(i,j, :) =  temp(r, 1, :);
       end
   end  
    
