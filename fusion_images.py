@@ -36,6 +36,7 @@ def wthn(image,h,h_prima):
 def bthn(image,h,h_prima):
     return  cv2.subtract(cv2.erode(cv2.dilate(image,h,iterations = 1),h_prima,iterations = 1),image)
 #Variables que permiten obtener los mayores por pixel para los WTHN y BTHN
+#Se crean imagenes completamente negras
 max_vis_wthn_all=np.zeros((row,col), np.uint8)
 max_ir_wthn_all=np.zeros((row,col), np.uint8)
 max_vis_bthn_all=np.zeros((row,col), np.uint8)
@@ -62,20 +63,21 @@ for i in range(iterations):
 
 #Se realizan las diferencias para calcular los WTHN(i)(i+1) y los BTHN(i)(i+1)
 #Variables para calcular el maximo por pixel para las diferencias de constraste
+#Se crean imagenes completamente negras
 max_vis_wthn_resta=np.zeros((row,col), np.uint8)
 max_ir_wthn_resta=np.zeros((row,col), np.uint8)
 max_vis_bthn_resta=np.zeros((row,col), np.uint8)
 max_ir_bthn_resta=np.zeros((row,col), np.uint8)
 for i in range(iterations-1):
-    vis_wthn_resta.append( cv2.subtract(vis_wthn_all[i+1],vis_wthn_all[i]))
-    vis_bthn_resta.append( cv2.subtract(vis_bthn_all[i+1],vis_bthn_all[i]))
-    ir_wthn_resta.append( cv2.subtract(ir_wthn_all[i+1],ir_wthn_all[i]))
-    ir_bthn_resta.append( cv2.subtract(ir_bthn_all[i+1],ir_bthn_all[i]))
+    vis_wthn_resta = cv2.subtract(vis_wthn_all[i+1],vis_wthn_all[i])
+    vis_bthn_resta = cv2.subtract(vis_bthn_all[i+1],vis_bthn_all[i])
+    ir_wthn_resta = cv2.subtract(ir_wthn_all[i+1],ir_wthn_all[i])
+    ir_bthn_resta = cv2.subtract(ir_bthn_all[i+1],ir_bthn_all[i])
 
-    max_vis_wthn_resta=cv2.max(max_vis_wthn_resta,vis_wthn_resta[i])
-    max_ir_wthn_resta=cv2.max(max_ir_wthn_resta,ir_wthn_resta[i])
-    max_vis_bthn_resta=cv2.max(max_vis_bthn_resta,vis_bthn_resta[i])
-    max_ir_bthn_resta=cv2.max(max_ir_bthn_resta,ir_bthn_resta[i])
+    max_vis_wthn_resta=cv2.max(max_vis_wthn_resta,vis_wthn_resta)
+    max_ir_wthn_resta=cv2.max(max_ir_wthn_resta,ir_wthn_resta)
+    max_vis_bthn_resta=cv2.max(max_vis_bthn_resta,vis_bthn_resta)
+    max_ir_bthn_resta=cv2.max(max_ir_bthn_resta,ir_bthn_resta)
 
 #Se calulan los operandos finales
 fcw=cv2.max(max_vis_wthn_all,max_ir_wthn_all)
