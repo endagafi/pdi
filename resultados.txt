@@ -1,0 +1,4 @@
+Entropia para el FTTHM:  7.250029095433646
+Entropia para el FTHC:  6.747790027022572
+Desviacion Estandar para el FTTHM:  62.540953577198536
+Desviacion Estandar para el FTHC:  30.463428627787007

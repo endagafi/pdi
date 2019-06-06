@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import math
 #Se leen las imagenes
 #Camp1_IR 
 vis = cv2.imread('Road2_Vis.png',0)
@@ -24,10 +25,49 @@ ir_wthn_resta=[]
 ir_bthn_resta=[]
 #Se calcula el IB que es el promedio de las imagenes
 ib=cv2.add(vis,ir)//2
-#Funcion que recibe una lista de imagenes y retorna una imagen con los valores
-#de cada pixel mas altos encontrados en las otras imagenes
 row=len(vis)
 col=len(vis[0])
+#Funcion que recibe una lista de imagenes y retorna una imagen con los valores
+#de cada pixel mas altos encontrados en las otras imagenes
+#--------------------------METRICAS----------------------------
+def probabilidad(image,pixel):
+    p=0.0
+    for i in image:
+        for j in i:
+            if int(j) == pixel:
+                p=p+1.0
+    return p/(row*col)
+
+def entropia(image):
+    sumat = 0.0
+    for i in range(256):
+        pk = probabilidad(image,i)
+        if pk>0:
+            logpk = (math.log(probabilidad(image,i))/math.log(2))
+            sumat = sumat + (pk*logpk)
+        else:
+            sumat = sumat + 0
+    entropy = sumat * (-1)
+    return entropy
+def sumatoriaSD(image):
+    sumat = 0.0
+    for j in range(col):
+        for i in range(row):
+            sumat = sumat + float(image[i][j])
+    sumat = sumat / (row * col)
+    return sumat
+
+def desviacionEstandar(image):
+    sd = 0.0
+    sumat = sumatoriaSD(image)
+    for j in range(col):
+        for i in range(row):
+            sd = sd + math.pow((image[i][j] - sumat),2)
+    sd = sd / (row * col)
+    sd = math.sqrt(sd)
+    return sd
+
+#--------------------------------------------------------------
 #Funcion que calcula el White Top-Hat
 def wthn(image,h,h_prima):
     return  cv2.subtract(image,cv2.dilate(cv2.erode(image,h,iterations = 1),h_prima,iterations = 1))
@@ -89,3 +129,17 @@ IF=cv2.add(ib,cv2.subtract(cv2.add(fcw,fdw),cv2.add(fcb,fdb)))
 cv2.imshow('image',IF)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+#Comparativa con otros metodos
+#Metodo FTHC Algoritmo de fusión basado en la transformada de top-
+#hat clásica
+H = np.ones((3,3),np.uint8)
+resta=cv2.subtract(cv2.max(cv2.morphologyEx(vis, cv2.MORPH_TOPHAT, H),cv2.morphologyEx(ir, cv2.MORPH_TOPHAT, H)),cv2.max(cv2.morphologyEx(vis, cv2.MORPH_BLACKHAT, H),cv2.morphologyEx(ir, cv2.MORPH_BLACKHAT, H)))
+IF_otro=cv2.add(ib,resta)
+cv2.imshow('image',IF_otro)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+print("Entropia para el FTTHM: ",entropia(IF))
+print("Entropia para el FTHC: ",entropia(IF_otro))
+print("Desviacion Estandar para el FTTHM: ",desviacionEstandar(IF))
+print("Desviacion Estandar para el FTHC: ",desviacionEstandar(IF_otro))
