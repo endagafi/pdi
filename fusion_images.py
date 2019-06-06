@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import math
+import time
 #Se leen las imagenes
 #Camp1_IR 
 vis = cv2.imread('Road2_Vis.png',0)
@@ -81,7 +82,8 @@ max_vis_wthn_all=np.zeros((row,col), np.uint8)
 max_ir_wthn_all=np.zeros((row,col), np.uint8)
 max_vis_bthn_all=np.zeros((row,col), np.uint8)
 max_ir_bthn_all=np.zeros((row,col), np.uint8)
-#Inicio del algoritmo
+#--------------------INICIO DEL ALGORITMO-----------------
+start_time = time.time()
 for i in range(iterations):
     #Calculo de los top-hat
     vis_wthn_all.append(wthn(vis,H,H_prima))
@@ -126,6 +128,8 @@ fcb=cv2.max(max_vis_bthn_all,max_ir_bthn_all)
 fdb=cv2.max(max_vis_bthn_resta,max_ir_bthn_resta)
 #Imagen Resultante
 IF=cv2.add(ib,cv2.subtract(cv2.add(fcw,fdw),cv2.add(fcb,fdb)))
+#------------------FIN DEL ALGORITMO-----------------
+print("--- %s segundos ---" % (time.time() - start_time))
 cv2.imshow('image',IF)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
