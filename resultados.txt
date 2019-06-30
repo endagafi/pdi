@@ -1,4 +1,10 @@
+-----------ROAD-----------------
 Entropia para el FTTHM:  7.250029095433646
-Entropia para el FTHC:  6.747790027022572
+Entropia para el FTTHM con CLAHE:  7.560928142141338
 Desviacion Estandar para el FTTHM:  62.540953577198536
-Desviacion Estandar para el FTHC:  30.463428627787007
+Desviacion Estandar para el FTTHM con CLAHE:  70.07187976465019
+------------CAMP----------------------
+Entropia para el FTTHM:  6.6431941164389725
+Entropia para el FTTHM con CLAHE:  7.39569002469495
+Desviacion Estandar para el FTTHM:  34.04077406064095
+Desviacion Estandar para el FTTHM con CLAHE:  49.19982284833049

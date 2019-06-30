@@ -4,8 +4,8 @@ import math
 import time
 #Se leen las imagenes
 #Camp1_IR 
-vis = cv2.imread('Road2_Vis.png',0)
-ir = cv2.imread('Road2_IR.png',0)
+vis = cv2.imread('Camp1_Vis.png',0)
+ir = cv2.imread('Camp1_IR.png',0)
 #Se inicializan los elementos Estructurantes
 H = np.ones((3,3),np.uint8)
 H_prima = np.ones((21,21),np.uint8)
@@ -133,17 +133,19 @@ print("--- %s segundos ---" % (time.time() - start_time))
 cv2.imshow('image',IF)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
-#Comparativa con otros metodos
-#Metodo FTHC Algoritmo de fusión basado en la transformada de top-
-#hat clásica
-H = np.ones((3,3),np.uint8)
-resta=cv2.subtract(cv2.max(cv2.morphologyEx(vis, cv2.MORPH_TOPHAT, H),cv2.morphologyEx(ir, cv2.MORPH_TOPHAT, H)),cv2.max(cv2.morphologyEx(vis, cv2.MORPH_BLACKHAT, H),cv2.morphologyEx(ir, cv2.MORPH_BLACKHAT, H)))
-IF_otro=cv2.add(ib,resta)
-cv2.imshow('image',IF_otro)
+#Comparativa con el nuevo metodo
+#Metodo FTTHM con CLAHE Algoritmo de fusión basado en la transformada de top-
+
+clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+cl1 = clahe.apply(IF)
+
+cv2.imwrite('image_res.png',cl1)
+IF_2=cv2.imread('image_res.png',0)
+cv2.imshow('image',IF_2)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
 print("Entropia para el FTTHM: ",entropia(IF))
-print("Entropia para el FTHC: ",entropia(IF_otro))
+print("Entropia para el FTTHM con CLAHE: ",entropia(IF_2))
 print("Desviacion Estandar para el FTTHM: ",desviacionEstandar(IF))
-print("Desviacion Estandar para el FTHC: ",desviacionEstandar(IF_otro))
+print("Desviacion Estandar para el FTTHM con CLAHE: ",desviacionEstandar(IF_2))
